@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: Hamma;
+  src: url(/fonts/Hamma.ttf);
+}
+
+main {
+  color: rgb(230, 230, 230);
+  font-family: 'Open Sans';
+  background-color: rgb(5, 5, 5);
+}

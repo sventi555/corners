@@ -1,0 +1,4 @@
+.caption {
+  @apply m-5 text-center tracking-widest text-3xl;
+  text-shadow: 2px 2px 6px #4F6276;
+}
