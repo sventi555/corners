@@ -16,7 +16,7 @@ export default function Resume({ data }) {
         <title>Resumé</title>
       </Head>
 
-      <main>
+      <main className='min-h-screen'>
         <div className='flex h-32 justify-between items-center border-b-2 border-gray-300'>
           <div className='p-4'>
             <h1 className='tracking-widest text-4xl'>{ data.name }</h1>
@@ -36,7 +36,7 @@ export default function Resume({ data }) {
               <ul className='text-sm ml-4 list-disc'>
                 {
                   data.languages.map((lang, index) => {
-                    return <li key={ index }>{ lang.name }</li>;
+                    return lang.show ? <li key={ index }>{ lang.text }</li> : null;
                   })
                 }
               </ul>
@@ -46,7 +46,7 @@ export default function Resume({ data }) {
               <ul className='text-sm ml-4 list-disc'>
                 {
                   data.technologies.map((tech, index) => {
-                    return <li key={ index }>{ tech.name }</li>;
+                    return tech.show ? <li key={ index }>{ tech.text }</li> : null;
                   })
                 }
               </ul>
@@ -56,7 +56,7 @@ export default function Resume({ data }) {
               <ul className='text-sm ml-4 list-disc'>
                 {
                   data.interests.map((interest, index) => {
-                    return <li key={ index }>{ interest.name }</li>;
+                    return interest.show ? <li key={ index }>{ interest.text }</li> : null;
                   })
                 }
               </ul>
@@ -67,7 +67,7 @@ export default function Resume({ data }) {
               <p className='text-xl tracking-widest mb-1.5'>Experience</p>
               {
                 data.experiences.map((experience, index) => {
-                  return <ResumeExperience key={ index } data={ experience } />;
+                  return experience.show ? <ResumeExperience key={ index } data={ experience } /> : null;
                 })
               }
             </div>
@@ -75,7 +75,7 @@ export default function Resume({ data }) {
               <p className='text-xl tracking-widest mb-1.5'>Projects</p>
               {
                 data.projects.map((project, index) => {
-                  return <ResumeProject key={ index } data={ project } />;
+                  return project.show ? <ResumeProject key={ index } data={ project } /> : null;
                 })
               }
             </div>
@@ -83,7 +83,7 @@ export default function Resume({ data }) {
               <p className='text-xl tracking-widest mb-1.5'>Education</p>
               {
                 data.educations.map((education, index) => {
-                  return <ResumeEducation key={ index } data={ education } />;
+                  return education.show ? <ResumeEducation key={ index } data={ education } /> : null;
                 })
               }
             </div>
@@ -97,11 +97,10 @@ export default function Resume({ data }) {
 export async function getStaticProps() {
   const API_URL = process.env.API_URL;
   const res = await fetch(`${API_URL}/resume`);
-  let data = await res.json();
+  const data = await res.json();
 
+  // TODO: handle this case in the render
   if (!data) return { notFound: true };
-
-  data = data[0];
 
   data.experiences.sort((e1, e2) => {
     return new Date(e2.start) - new Date(e1.start);
@@ -113,6 +112,6 @@ export async function getStaticProps() {
     return new Date(e2.start) - new Date(e1.start);
   });
   return {
-    props: { data: data }
+    props: { data }
   };
 }
